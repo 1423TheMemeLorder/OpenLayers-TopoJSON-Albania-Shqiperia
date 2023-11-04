@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        /* Set the map container's size and make the background transparent */
+        #map {
+            width: 800px;
+            height: 600px;
+            background-color: transparent;
+        }
+
+        /* Adjust the opacity of the image overlay */
+        .leaflet-image-layer {
+            opacity: 0.8;
+            /* You can adjust this value as needed */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var map;
+        var overlay;
+
+        function initialize() {
+            // Define the boundaries for the map (centered on Albania)
+            var southWest = L.latLng(39.6449, 19.3474);
+            var northEast = L.latLng(42.6622, 21.0576);
+            var bounds = L.latLngBounds(southWest, northEast);
+
+            // Create a map with a custom base layer (just an image covering the entire view)
+            map = L.map("map", {
+                attributionControl: false,
+                minZoom: 8,
+                maxBounds: bounds,
+                maxBoundsViscosity: 1.0
+            }).setView([41.1533, 20.1683], 8); // Centered on Albania with a specific zoom level
+
+            // Create a custom image layer that covers the entire map view
+            var imageBounds = [
+                [39.6449, 19.3474], // Southwest corner of Albania
+                [42.6622, 21.0576]  // Northeast corner of Albania
+            ];
+
+            var imageUrl = 'test-image.png';
+            L.imageOverlay(imageUrl, imageBounds).addTo(map);
+
+            // Define custom icon options
+            var customIcon = L.divIcon({
+                className: 'custom-marker',
+                html: '<img src="location-dot-solid.svg" width="32" height="32">'
+            });
+
+            // Add a custom marker for Tirana with a popup description and URL
+            var tiranaMarker = L.marker([41.3275, 19.8187], { icon: customIcon }).addTo(map);
+            tiranaMarker.bindPopup("<b>Tirana, Albania</b><br> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Vestibulum auctor lacinia augue, ac laoreet sapien iaculis non. Integer nec ultricies neque. Sed vel tincidunt felis. Sed pharetra, tortor nec varius facilisis, odio sapien vulputate metus, non rhoncus sapien purus et elit. Nullam nec velit a elit blandit consequat. <br><a href='https://example.com/tirana'>More info</a>").openPopup();
+
+            // Add a custom marker for Saranda with a popup description and URL
+            var sarandaMarker = L.marker([39.8750, 20.0057], { icon: customIcon }).addTo(map);
+            sarandaMarker.bindPopup("<b>Saranda, Albania</b><br>Coastal city<br><a href='https://example.com/saranda'>More info</a>").openPopup();
+        }
+
+        initialize();
+    </script>
+
+</body>
+
+</html>
