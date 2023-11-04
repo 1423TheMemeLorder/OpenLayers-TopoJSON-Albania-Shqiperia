@@ -41,17 +41,18 @@
                 attributionControl: false,
                 minZoom: 8,
                 maxBounds: bounds,
-                maxBoundsViscosity: 1.0
+                maxBoundsViscosity: 1.0,
+                crs: L.CRS.Simple // Use a simple CRS (Coordinate Reference System) that uses degrees
             }).setView([41.1533, 20.1683], 8); // Centered on Albania with a specific zoom level
 
             // Create a custom image layer that covers the entire map view
             var imageBounds = [
-                [39.6449, 19.3474], // Southwest corner of Albania
-                [42.6622, 21.0576]  // Northeast corner of Albania
+                [42.6622, 19.3474], // Southwest corner of Albania in degrees
+                [39.6449, 21.0576]  // Northeast corner of Albania in degrees
             ];
 
-            var imageUrl = 'test-image.png';
-            L.imageOverlay(imageUrl, imageBounds).addTo(map);
+            var imageUrl = 'al_1km_georeferenced.png';
+            L.imageOverlay(imageUrl, imageBounds, { crs: L.CRS.Simple }).addTo(map);
 
             // Define custom icon options
             var customIcon = L.divIcon({
