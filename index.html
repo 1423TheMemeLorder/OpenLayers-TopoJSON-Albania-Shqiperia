@@ -27,10 +27,7 @@
             var map = new ol.Map({
                 target: 'map',
                 layers: [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM()
-                    }),
-                    new ol.layer.Vector({
+                    new ol.layer.Vector({ // Display only the geometry shape
                         source: new ol.source.Vector({
                             features: (new ol.format.GeoJSON()).readFeatures(geoJsonData, {
                                 featureProjection: 'EPSG:3857'
@@ -39,8 +36,8 @@
                     })
                 ],
                 view: new ol.View({
-                    center: ol.proj.fromLonLat([0, 0]),
-                    zoom: 2
+                    center: ol.proj.fromLonLat([20, 41.6]), // Center on Albania
+                    zoom: 6 // Adjust the zoom level as needed
                 })
             });
         }
