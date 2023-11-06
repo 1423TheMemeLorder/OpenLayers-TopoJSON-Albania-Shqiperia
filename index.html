@@ -23,6 +23,19 @@
             // Convert TopoJSON to GeoJSON using tjfs
             var geoJsonData = topojson.feature(topoJsonData, topoJsonData.objects.layerName);
 
+            // Create a Tirana feature with a tooltip
+            var tiranaFeature = new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.fromLonLat([19.8187, 41.3275])), // Coordinates for Tirana
+                name: 'Tirana',
+                url: 'https://en.wikipedia.org/wiki/Tirana',
+                description: 'Tirana is the capital and largest city of Albania.'
+            });
+
+            // Add the Tirana feature to a source
+            var tiranaSource = new ol.source.Vector({
+                features: [tiranaFeature]
+            });
+
             // Initialize the map
             var map = new ol.Map({
                 target: 'map',
@@ -31,6 +44,21 @@
                         source: new ol.source.Vector({
                             features: (new ol.format.GeoJSON()).readFeatures(geoJsonData, {
                                 featureProjection: 'EPSG:3857'
+                            })
+                        })
+                    }),
+                    new ol.layer.Vector({ // Add a vector layer for the Tirana feature
+                        source: tiranaSource,
+                        style: new ol.style.Style({
+                            image: new ol.style.Circle({
+                                radius: 6,
+                                fill: new ol.style.Fill({ color: 'red' })
+                            }),
+                            text: new ol.style.Text({
+                                text: tiranaFeature.get('name'),
+                                offsetY: -12,
+                                scale: 1.2,
+                                fill: new ol.style.Fill({ color: 'black' })
                             })
                         })
                     })
