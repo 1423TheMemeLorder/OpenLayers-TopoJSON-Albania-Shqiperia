@@ -1,0 +1,64 @@
+Kodi HTML që keni dhënë është një shembull i një faqeje të internetit që përdor OpenLayers dhe TopoJSON për të shfaqur hartën e Shqipërisë. Kjo faqe do të paraqesë dokumentacionin për të kuptuar se si kodi funksionon.
+
+Dokumentacioni për Kodin HTML
+Hapi 1: Përfshirja e Stilimit dhe JavaScript
+<head>
+    <title>OpenLayers me TopoJSON në GeoJSON</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/8.1.0/ol.min.css"
+        integrity="sha512-m1KzXSAktfv5h68DmZQoSyYh/GDrNeblGi7wFHwoQV0Hyg8vHlo5yh+D7HnGtFYYYc4dzltbPC3WqIv303WulQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+Këtu kemi përfshirë stilin e OpenLayers dhe titullin e faqes.
+
+<body>
+    <div id="map" style="width: 100%; height: 400px;"></div>
+Kemi krijuar një div me ID "map" që do të përdoret për të shfaqur hartën. Kjo është e caktuar të jetë 100% e gjerë dhe të ketë një lartësi prej 400 pikselash.
+Hapi 3: Përfshirja e Librave të OpenLayers dhe TopoJSON
+    <script src="https://cdn.jsdelivr.net/npm/ol@v8.1.0/dist/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.1.0/ol.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"
+        integrity="sha512-4UKI/XKm3xrvJ6pZS5oTRvIQGIzZFoXR71rRBb1y2N+PbwAsKa5tPl2J6WvbEvwN3TxQCm8hMzsl/pO+82iRlg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+Këtu jemi duke përfshirë librari të cilat janë të nevojshme për të shfaqur hartën dhe për të punuar me TopoJSON.
+Hapi 4: Krijimi i Hartës dhe Konvertimi i TopoJSON në GeoJSON
+    <script>
+        // Funksioni për të krijuar hartën duke përdorur të dhënat TopoJSON
+        function createMap(topoJsonData) {
+            // Konverto TopoJSON në GeoJSON përdorur topojson.feature
+            var geoJsonData = topojson.feature(topoJsonData, topoJsonData.objects.layerName);
+
+            // Inicializimi i hartës
+            var map = new ol.Map({
+                target: 'map',
+                layers: [
+                    new ol.layer.Vector({ // Shfaq vetëm formën gjeometrike
+                        source: new ol.source.Vector({
+                            features: (new ol.format.GeoJSON()).readFeatures(geoJsonData, {
+                                featureProjection: 'EPSG:3857'
+                            })
+                        })
+                    })
+                ],
+                view: new ol.View({
+                    center: ol.proj.fromLonLat([20, 41.6]), // Qendër në Shqipëri
+                    zoom: 6 // Rregullo nivelin e zbretjes sipas nevojës
+                })
+            });
+        }
+
+        // Merr të dhënat TopoJSON nga skeda
+        fetch('al-all.topo.json')
+            .then(response => response.json())
+            .then(topoJsonData => {
+                // Përdor të dhënat TopoJSON të ngarkuara për të krijuar hartën
+                createMap(topoJsonData);
+            })
+            .catch(error => console.error('Gabim në ngarkimin e të dhënave TopoJSON:', error));
+    </script>
+</body>
+Ky hapi është më i rëndësishmi. Kemi funksionin createMap që merr të dhënat TopoJSON, i konverton ato në GeoJSON, dhe pastaj inicializon një hartë që shfaq vetëm formën gjeometrike të hartës. Ne përdorim koordinatat gjeografike për të vendosur qendrën dhe nivelin e zbretjes të hartës.
+
+Të dhënat TopoJSON ngarkohen nga skeda "al-all.topo.json" përmes një kërkesë të thirrjes fetch.
+
+Kjo është një shpjegim i thjeshtë për të kuptuar se si funksionon kodi HTML për të shfaqur hartën e Shqipërisë përdorur OpenLayers dhe TopoJSON. Ju mund të përdorni këtë kod si shembull për të krijuar hartën tuajen me të dhëna të tjera TopoJSON.
