@@ -2,76 +2,58 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <style>
-        /* Set the map container's size and make the background transparent */
-        #map {
-            width: 1200px;
-            height: 1000px;
-
-        }
-
-        /* Adjust the opacity of the image overlay */
-        .leaflet-image-layer {
-            opacity: 0.8;
-            /* You can adjust this value as needed */
-        }
-    </style>
+    <title>OpenLayers with TopoJSON to GeoJSON</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/8.1.0/ol.min.css"
+        integrity="sha512-m1KzXSAktfv5h68DmZQoSyYh/GDrNeblGi7wFHwoQV0Hyg8vHlo5yh+D7HnGtFYYYc4dzltbPC3WqIv303WulQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
+    <div id="map" style="width: 100%; height: 400px;"></div>
 
-    <div id="map"></div>
+    <script src="https://cdn.jsdelivr.net/npm/ol@v8.1.0/dist/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.1.0/ol.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"
+        integrity="sha512-4UKI/XKm3xrvJ6pZS5oTRvIQGIzZFoXR71rRBb1y2N+PbwAsKa5tPl2J6WvbEvwN3TxQCm8hMzsl/pO+82iRlg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        var map;
-        var overlay;
+        // Function to create the map using the TopoJSON data
+        function createMap(topoJsonData) {
+            // Convert TopoJSON to GeoJSON using tjfs
+            var geoJsonData = topojson.feature(topoJsonData, topoJsonData.objects.layerName);
 
-        function initialize() {
-            // Define the boundaries for the map (centered on Albania)
-            var southWest = L.latLng(39.6449, 19.518);
-            var northEast = L.latLng(42.6622, 21.0576);
-            var bounds = L.latLngBounds(southWest, northEast);
-
-            // Create a map with a custom base layer (just an image covering the entire view)
-            map = L.map("map", {
-                attributionControl: false,
-                minZoom: 8,
-                maxBounds: bounds,
-                maxBoundsViscosity: 1.0,
-                crs: L.CRS.Simple // Use a simple CRS (Coordinate Reference System) that uses degrees
-            }).setView([41.1533, 20.1683], 8); // Centered on Albania with a specific zoom level
-
-            // Create a custom image layer that covers the entire map view
-            var imageBounds = [
-                [42.6622, 19.3474], // Southwest corner of Albania in degrees
-                [39.6449, 21.0576]  // Northeast corner of Albania in degrees
-            ];
-
-            var imageUrl = 'snazzy-image.png';
-            L.imageOverlay(imageUrl, imageBounds, { crs: L.CRS.Simple }).addTo(map);
-
-            // Define custom icon options
-            var customIcon = L.divIcon({
-                className: 'custom-marker',
-                html: '<img src="location-dot-solid.svg" width="32" height="32">'
+            // Initialize the map
+            var map = new ol.Map({
+                target: 'map',
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    }),
+                    new ol.layer.Vector({
+                        source: new ol.source.Vector({
+                            features: (new ol.format.GeoJSON()).readFeatures(geoJsonData, {
+                                featureProjection: 'EPSG:3857'
+                            })
+                        })
+                    })
+                ],
+                view: new ol.View({
+                    center: ol.proj.fromLonLat([0, 0]),
+                    zoom: 2
+                })
             });
-
-            // Add a custom marker for Tirana with a popup description and URL
-            var tiranaMarker = L.marker([41.3275, 19.8187], { icon: customIcon }).addTo(map);
-            tiranaMarker.bindPopup("<b>Tirana, Albania</b><br> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Vestibulum auctor lacinia augue, ac laoreet sapien iaculis non. Integer nec ultricies neque. Sed vel tincidunt felis. Sed pharetra, tortor nec varius facilisis, odio sapien vulputate metus, non rhoncus sapien purus et elit. Nullam nec velit a elit blandit consequat. <br><a href='https://example.com/tirana'>More info</a>").openPopup();
-
-            // Add a custom marker for Saranda with a popup description and URL
-            var sarandaMarker = L.marker([39.878612, 20.014621], { icon: customIcon }).addTo(map);
-            sarandaMarker.bindPopup("<b>Saranda, Albania</b><br>Coastal city<br><a href='https://example.com/saranda'>More info</a>").openPopup();
         }
 
-        initialize();
+        // Fetch the TopoJSON data from the file
+        fetch('al-all.topo.json')
+            .then(response => response.json())
+            .then(topoJsonData => {
+                // Use the loaded TopoJSON data to create the map
+                createMap(topoJsonData);
+            })
+            .catch(error => console.error('Error loading TopoJSON data:', error));
     </script>
-
 </body>
 
 </html>
