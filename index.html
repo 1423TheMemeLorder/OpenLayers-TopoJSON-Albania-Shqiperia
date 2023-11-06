@@ -8,9 +8,9 @@
     <style>
         /* Set the map container's size and make the background transparent */
         #map {
-            width: 800px;
-            height: 600px;
-            background-color: transparent;
+            width: 1200px;
+            height: 1000px;
+
         }
 
         /* Adjust the opacity of the image overlay */
@@ -32,7 +32,7 @@
 
         function initialize() {
             // Define the boundaries for the map (centered on Albania)
-            var southWest = L.latLng(39.6449, 19.3474);
+            var southWest = L.latLng(39.6449, 19.518);
             var northEast = L.latLng(42.6622, 21.0576);
             var bounds = L.latLngBounds(southWest, northEast);
 
@@ -51,7 +51,7 @@
                 [39.6449, 21.0576]  // Northeast corner of Albania in degrees
             ];
 
-            var imageUrl = 'al_1km_georeferenced.png';
+            var imageUrl = 'snazzy-image.png';
             L.imageOverlay(imageUrl, imageBounds, { crs: L.CRS.Simple }).addTo(map);
 
             // Define custom icon options
@@ -65,7 +65,7 @@
             tiranaMarker.bindPopup("<b>Tirana, Albania</b><br> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Vestibulum auctor lacinia augue, ac laoreet sapien iaculis non. Integer nec ultricies neque. Sed vel tincidunt felis. Sed pharetra, tortor nec varius facilisis, odio sapien vulputate metus, non rhoncus sapien purus et elit. Nullam nec velit a elit blandit consequat. <br><a href='https://example.com/tirana'>More info</a>").openPopup();
 
             // Add a custom marker for Saranda with a popup description and URL
-            var sarandaMarker = L.marker([39.8750, 20.0057], { icon: customIcon }).addTo(map);
+            var sarandaMarker = L.marker([39.878612, 20.014621], { icon: customIcon }).addTo(map);
             sarandaMarker.bindPopup("<b>Saranda, Albania</b><br>Coastal city<br><a href='https://example.com/saranda'>More info</a>").openPopup();
         }
 
