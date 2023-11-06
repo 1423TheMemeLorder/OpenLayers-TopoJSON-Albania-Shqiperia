@@ -1,3 +1,5 @@
+
+![al_map](https://github.com/XhuljanoKushova/svg-overlay-map-Albania/assets/28980702/147a4066-2eff-4b94-94dd-62fa38b8a163)
 Harta e Shqipërisë duke përdorur OpenLayers dhe TopoJSON
 Ky repozitor përmban kodin HTML për të krijuar një faqe interneti që shfaq hartën e Shqipërisë duke përdorur OpenLayers dhe TopoJSON. Ky kod ju lejon të konvertoni të dhënat TopoJSON në GeoJSON dhe t'i shfaqni ato në një hartë interaktive.
 
