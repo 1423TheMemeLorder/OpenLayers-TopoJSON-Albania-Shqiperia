@@ -14,7 +14,7 @@ Për të filluar me këtë kod, ndiqni këto hapa:
 Klononi këtë repozitori në kompjuterin tuaj lokal:
 
 
-git clone https://github.com/XhuljanoKushova/svg-overlay-map-Albania.git
+git clone 
 Hapni skedarin index.html në shfletuesin tuaj të internetit për të parë hartën.
 
 Përdorimi
