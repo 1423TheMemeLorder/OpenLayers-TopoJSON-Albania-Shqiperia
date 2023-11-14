@@ -36,4 +36,4 @@ TopoJSON: Një format për kodimin e strukturave të të dhënave gjeografike q�
 Kontakti
 Në qoftë se keni pyetje ose nevojë për ndihmë shtesë, ju lutemi na kontaktoni në 📧  <a href="mailto:xhuljanokushova@gmail.com">xhuljanokushova@gmail.com</a>.
 
-OpenLayers dhe TopoJSON për shfaqjen e hartave! 🗺️🌍
+ 
